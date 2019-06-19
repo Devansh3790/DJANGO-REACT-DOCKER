@@ -1,0 +1,48 @@
+version: '3'
+
+volumes:
+  local_database_data: {}
+  local_database_data_backups: {}
+
+services:
+  backend: &backend
+    build:
+      context: .
+      dockerfile: ./compose/local/backend/Dockerfile
+    image: project_local_backend
+    depends_on:
+      - database
+    volumes:
+      - ./backend:/app
+    env_file:
+      - ./.envs/.local/.backend
+      - ./.envs/.local/.database
+    ports:
+      - "8000:8000"
+    command: /start
+
+  database:
+    build:
+      context: .
+      dockerfile: ./compose/local/database/Dockerfile
+    image: project_local_database
+    volumes:
+      - local_database_data:/var/lib/postgresql/data
+      - local_database_data_backups:/backups
+    env_file:
+      - ./.envs/.local/.database
+
+  frontend: &frontend
+    build:
+      context: .
+      dockerfile: ./compose/local/frontend/Dockerfile
+    image: project_local_frontend
+    depends_on:
+      - database
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - '3001:3000'
+    command: /start

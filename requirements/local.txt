@@ -1,0 +1,8 @@
+-r ./base.txt
+
+psycopg2==2.8.2 --no-binary psycopg2
+
+
+# Django
+# ------------------------------------------------------------------------------
+django-debug-toolbar==1.11  # https://github.com/jazzband/django-debug-toolbar

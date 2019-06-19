@@ -1,0 +1,9 @@
+!.coveragerc
+!.pylintrc
+
+.*
+
+backend/.*
+
+frontend/.*
+frontend/node_modules
